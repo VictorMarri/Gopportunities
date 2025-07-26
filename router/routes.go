@@ -38,7 +38,7 @@ func initializeRoutes(router *gin.Engine) {
 			})
 		})
 
-		//GET a list of available opportunities
+		//GETs a list of available opportunities
 		v1.GET("/openings", func(ginContext *gin.Context) {
 			ginContext.JSON(http.StatusOK, gin.H{
 				"msg": "GET Openings",
