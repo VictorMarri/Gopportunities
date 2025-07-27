@@ -7,22 +7,23 @@ import (
 	"os"
 )
 
-func InitializeSQLite() (*gorm.DB, error) /*What will return on this method*/ {
-	logger := GetLogger("Initializing SQLite instance")
+func InitializeSQLite() (*gorm.DB, error) {
+	logger := GetLogger("sqlite")
+
 	dbPath := "./db/main.db"
 
-	//Check if database already exists
+	// Check if the database file exists
 	_, err := os.Stat(dbPath)
-
 	if os.IsNotExist(err) {
-		logger.Info("Database file not found. Creating...")
-		//Create database file and directory
+		logger.Info("database file not found, creating...")
+		// Create the database file and directory
 		err = os.MkdirAll("./db", os.ModePerm)
 		if err != nil {
 			return nil, err
 		}
 
 		file, err := os.Create(dbPath)
+
 		if err != nil {
 			return nil, err
 		}
@@ -30,20 +31,18 @@ func InitializeSQLite() (*gorm.DB, error) /*What will return on this method*/ {
 		file.Close()
 	}
 
-	//Creating database and connection
+	// Create DB and connect
 	db, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
-
 	if err != nil {
-		logger.Errorf("Error opening SQLite instance: %v", err)
+		logger.Errorf("sqlite opening error: %v", err)
 		return nil, err
 	}
-
-	err = db.AutoMigrate(&schemas.Opening{}) //Passing the struct opening pointer to create database migration based on it
-
+	// Migrate the Schema
+	err = db.AutoMigrate(&schemas.Opening{})
 	if err != nil {
-		logger.Errorf("Error migrating database: %v", err)
+		logger.Errorf("sqlite automigration error: %v", err)
 		return nil, err
 	}
-
+	// Return the DB
 	return db, nil
 }
