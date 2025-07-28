@@ -9,6 +9,10 @@ import (
 func initializeRoutes(router *gin.Engine) {
 	v1 := router.Group("/api/v1")
 	{
+
+		//Initialize handler
+		handler.InitializeHandler()
+
 		//http://localhost:8080/api/v1/opening
 
 		//GET opening opportunities
