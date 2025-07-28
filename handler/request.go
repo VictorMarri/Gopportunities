@@ -58,3 +58,28 @@ func (r *CreateOpeningRequest) Validate() error {
 
 	return nil
 }
+
+// Maybe use and interface here with CreateOpeningRequest?
+type UpdateOpeningRequest struct {
+	Role     string `json:"role"`
+	Company  string `json:"company"`
+	Location string `json:"location"`
+	Remote   *bool  `json:"remote"`
+	Link     string `json:"link"`
+	Salary   int64  `json:"salary"`
+}
+
+func (r *UpdateOpeningRequest) Validate() error {
+	//If any field is provided, validation is true
+	if r.Role != "" ||
+		r.Company != "" ||
+		r.Location != "" ||
+		r.Remote != nil ||
+		r.Link != "" ||
+		r.Salary != 0 {
+		return nil
+	}
+
+	//If none of the fields were provided, return false
+	return fmt.Errorf("At least one valid field must be provided")
+}
